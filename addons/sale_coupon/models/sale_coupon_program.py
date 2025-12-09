@@ -317,8 +317,8 @@ class SaleCouponProgram(models.Model):
 
     def _is_valid_partner(self, partner):
         if self.rule_partners_domain and self.rule_partners_domain != '[]':
-            domain = safe_eval(self.rule_partners_domain) + [('id', '=', partner.id)]
-            return bool(self.env['res.partner'].search_count(domain))
+            domain = safe_eval(self.rule_partners_domain)
+            return bool(partner.filtered_domain(domain))
         else:
             return True
 
@@ -327,8 +327,8 @@ class SaleCouponProgram(models.Model):
         # NOTE: if you override this method, think of also overriding _get_valid_products
         # we also encourage the use of _get_valid_products as its execution is faster
         if self.rule_products_domain:
-            domain = safe_eval(self.rule_products_domain) + [('id', '=', product.id)]
-            return bool(self.env['product.product'].search_count(domain))
+            domain = safe_eval(self.rule_products_domain)
+            return bool(product.filtered_domain(domain))
         else:
             return True
 
